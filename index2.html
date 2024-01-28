@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        .korisnici{
+            padding: 5px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Korisnici</h1>
+    <hr>
+    <div id="odgovor" class="odgovor"></div>
+    <hr>
+    <a href="dodajKorisnika.php" class="btn btn-success">Dodaj korisnika</a>
+
+
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script>
+$(function() {
+    sviKorisnici();
+})
+function sviKorisnici(){
+    let odgovor=$("#odgovor");
+    $.post("ajax.php", function(response){
+        let svi = JSON.parse(response);
+        console.log(svi);
+        for(korisnik of svi){
+            let id = korisnik['id'];
+            let izmeni = "izmeniKorisnika2.php?id="+id;
+            let obrisi = "obrisiKorisnika2.php?id="+id;
+            let div = "<div class='korisnici'>" + korisnik['ime'] + " " + korisnik['prezime'] + "  "
+            + "<a href='"+izmeni+"'  class='btn btn-info'>Izmeni</a>";
+            if(korisnik['obrisan']=="1")
+                div += " " + "<i>Obrisan</i>";
+            else
+                div += " " + "<a href='"+obrisi+"'  class='btn btn-danger'>Obrisi</a>";
+            odgovor.append(div);
+        }
+    
+    })
+}
+
+</script>
